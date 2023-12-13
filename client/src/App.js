@@ -5,12 +5,13 @@ import { useState } from "react";
 import Form from './components/Form/Form.js'
 import Posts from './components/Posts/Posts.js'
 import logo from './images/logo.png'
-import useStyles from './styles';
+
 import styles from "./styles.css";
 import Toolbar from "@material-ui/core/Toolbar";
+import { Header } from 'semantic-ui-react'
 
 const App = () => {
-    const classes = useStyles();
+
     const [seen, setSeen] = useState(false)
 
     function togglePop() {
@@ -18,27 +19,36 @@ const App = () => {
     };
 
     return (
-        <Container maxidth="lg">
-            <AppBar className={"appbar"} position="static" color="inheret">
-                <Toolbar className={"toolbar"}>
-                    <img src={logo} alt="logo" height="60" />
-                    <Typography className={"heading"} variant="h2">Gourmet It</Typography>
-                    <button className={"button"} onClick={togglePop}>Create Recipe</button>
+        <>
+
+            <Toolbar variant="dense" className={"toolbar"}>
+                <img src={logo} alt="logo" height="80" />
+                <div className="button-padding">
+                    <button className={"button-74"}>View Recipes</button></div>
+                <div style={{ display: "flex" }}><button className={"button-74"} onClick={togglePop}>Share your Recipe</button>
+                    {seen ? <Form toggle={togglePop} /> : null}</div>
+
+                <Header as='h1' className="heading">Gourmet It</Header>
+                <button className={"button-74"}>Login</button>
+
+            </Toolbar >
+            <div className="hero-image">
+                <div className="hero-text">
+                    <h1>The world's virtual cookbook</h1>
+                    <button className={"button-74"} onClick={togglePop}>Share your recipe</button>
                     {seen ? <Form toggle={togglePop} /> : null}
-                </Toolbar>
-            </AppBar>
-            <Grow in>
-                <Container>
-                    <Grid container justifyContent="space-between" alignItems="stretch" spacing={3}>
-                        <Grid item xs={12} sm={7}>
-                            <Posts />
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                        </Grid>
+                </div>
+            </div >
+            <Container>
+                <Grid container justifyContent="space-between" alignItems="stretch" spacing={3}>
+                    <Grid item xs={12} sm={7}>
+                        <Posts />
                     </Grid>
-                </Container>
-            </Grow>
-        </Container >
+                    <Grid item xs={12} sm={4}>
+                    </Grid>
+                </Grid>
+            </Container>
+        </>
     )
 }
 

@@ -3,19 +3,25 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-import postRoutes from './routes/posts.js';
-//ts 25:51
+import recipeRoutes from './routes/recipeRoutes.js';
+import { PORT, CONNECTION_URL } from './config.js';
+
 const app = express();
 
-app.use('/posts', postRoutes);
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }))
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
 app.use(cors());
 
-const CONNECTION_URL = 'mongodb+srv://sarah:sarah123@cluster0.h6nmmry.mongodb.net/?retryWrites=true&w=majority'
-const PORT = process.env.PORT || 5000;
+
+
+app.use('/', recipeRoutes);
 
 mongoose.connect(CONNECTION_URL)
-    .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
+    .then(() => {
+        console.log('Connected to DB');
+        app.listen(PORT, () => {
+            console.log(`Server running on port: ${PORT}`);
+        });
+    })
     .catch((error) => console.log(error.message));

@@ -1,8 +1,9 @@
 import mongoose from 'mongoose'
 
-const postSchema = mongoose.Schema({
+const recipeSchema = mongoose.Schema({
     title: String,
-    message: String,
+    ingredients: String,
+    instructions: String,
     creator: String,
     tags: [String],
     selectedFile: String,
@@ -16,6 +17,6 @@ const postSchema = mongoose.Schema({
     }
 })
 
-const PostMessage = mongoose.model('PostMessage', postSchema)
+const Recipe = mongoose.model('Recipe', recipeSchema)
 
-export default PostMessage
+export default Recipe
