@@ -3,17 +3,51 @@ import { useState } from "react";
 import styles from "./styles.css";
 import { Toolbar, Grow } from "@material-ui/core";
 import logo from '../../images/logo.png'
+import axios from 'axios';
+import * as api from '../../api/index.js'
+import { useSnackbar } from 'notistack';
+import FileBase from 'react-file-base64'
+import { useNavigate } from 'react-router-dom';
 
 const Form = (props) => {
 
     const [title, setTitle] = useState('')
     const [ingredients, setIngredients] = useState('')
-    const [tags, setTags] = useState('')
     const [instructions, setInstructions] = useState('')
+    const [tags, setTags] = useState('')
+    const [selectedFile, setSelectedFile] = useState('')
 
-    function handleSubmit(e) {
+
+    const [loading, setLoading] = useState(false);
+    const { enqueueSnackbar } = useSnackbar();
+
+    const handleSubmit = (e) => {
         e.preventDefault();
         props.toggle();
+    }
+
+    const handleSaveRecipe = () => {
+        const data = {
+            title,
+            ingredients,
+            instructions,
+            tags,
+            selectedFile,
+        };
+        setLoading(true);
+        api
+            .createRecipe(data)
+            .then(() => {
+                setLoading(false);
+                enqueueSnackbar('Recipe Created successfully', { variant: 'success' });
+                window.location.reload();
+            })
+            .catch((error) => {
+                setLoading(false);
+                // alert('An error happened. Please Chack console');
+                enqueueSnackbar('Error', { variant: 'error' });
+                console.log(error);
+            });
     }
 
     return (
@@ -43,11 +77,16 @@ const Form = (props) => {
                             Comma Separated Tags:
                             <input placeholder="dairy, gluten, dessert" type="text" value={tags} onChange={e => setTags(e.target.value)} />
                         </label>
-                        <button type="submit">Create</button>
+                        <div className="file-input">
+                            <FileBase type="file"
+                                multiple={false}
+                                onDone={({ base64 }) => setSelectedFile(base64)}></FileBase>
+                        </div>
+                        <button type="submit" onClick={handleSaveRecipe}>Create</button>
                     </form>
                 </div>
             </div >
-        </Grow>
+        </Grow >
     )
 }
 export default Form;

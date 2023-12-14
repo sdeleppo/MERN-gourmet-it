@@ -21,11 +21,13 @@
     width: 40%;
     outline-style: solid;
     outline-color: rgb(255, 234, 225);
+
     }
     
     .popup-inner h2 {
     margin-top: 0;
     font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color: #422800;
     }
     
     .popup-inner label {
@@ -33,6 +35,7 @@
     margin-bottom: 10px;
     font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     font-weight: bold;
+    color: #422800;
     }
     
     .popup-inner input {
@@ -94,6 +97,9 @@
     color: #ffffff;
     cursor: not-allowed;
     }
+    .file-input {
+        color:#422800;
+    }
     textarea {
         width: 100%;
         max-width:750px;
@@ -104,4 +110,5 @@
         min-height: 22px;
         font-size: 15px;
         font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
     }
