@@ -1,15 +1,27 @@
 import Recipe from '../models/recipeModel.js'
+import mongoose from 'mongoose';
 
 export const createRecipe = async (req, res) => {
     const recipeBody = req.body;
     console.log(recipeBody);
+    if (
+        !req.body.title ||
+        !req.body.ingredients ||
+        !req.body.instructions
+    ) {
+        return res.status(400).send({
+            message: 'Title, ingredients, and instructions are required fields.'
+        });
+    }
     const newRecipe = {
         title: recipeBody.title,
         instructions: recipeBody.instructions,
         ingredients: recipeBody.ingredients,
         tags: recipeBody.tags,
         likeCount: recipeBody.likeCount,
-        selectedFile: recipeBody.selectedFile
+        selectedFile: recipeBody.selectedFile,
+        isVegetarian: recipeBody.isVegetarian,
+        isVegan: recipeBody.isVegan
     }
 
     try {
@@ -58,7 +70,7 @@ export const updateRecipe = async (req, res) => {
             !req.body.ingredients ||
             !req.body.instructions
         ) {
-            return response.status(400).send({
+            return res.status(400).send({
                 message: 'Title, ingredients, and instructions are required fields.'
             });
         }
@@ -68,6 +80,24 @@ export const updateRecipe = async (req, res) => {
             return res.status(404).send({ message: 'Recipe not found' })
         }
         return res.status(200).send({ message: 'Recipe updated successfully', data: result })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export const likeRecipe = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No recipe with id: ${id}`);
+
+        const recipe = await Recipe.findById(id);
+
+        if (!recipe) {
+            return res.status(404).send({ message: 'Recipe not found' })
+        }
+
+        const updatedRecipe = await Recipe.findByIdAndUpdate(id, { likeCount: recipe.likeCount + 1 }, { new: true });
+        return res.status(200).send({ message: 'Recipe updated successfully', data: updatedRecipe })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }

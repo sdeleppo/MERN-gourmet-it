@@ -1,0 +1,92 @@
+.toolbar {
+    display: flex;
+    flex-direction: row;
+    background: rgb(240, 237, 236);
+}
+
+.heading {
+    color:#7a2604b6;
+    font-family: 'Playfair Display', serif;
+    font-size: 60px;
+    font-weight: bolder;
+    margin: auto;
+    white-space: nowrap;
+    text-align: center; 
+    flex-grow: 4;
+
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    display: inline-block;
+
+}
+.logo {
+  height: 80px; 
+}
+.login-button {
+  background-color: #fbeee0;
+  border: 2px solid #422800;
+  border-radius: 20px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 0 18px;
+  line-height: 35px;
+  white-space:nowrap;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  font-family: 'Playfair Display', serif;
+  width: 100px/100vw;
+height: 100px/10vh;
+position: relative;
+}
+.login-button:hover {
+  background-color: #fff;
+}
+
+.login-button:active {
+  box-shadow: #422800 2px 2px 0 0;
+  transform: translate(2px, 2px);
+}
+
+@media screen and (max-width: 700px) {
+.heading {
+  font-size: 40px;
+}
+.logo {
+  height: 50px; 
+}
+}
+
+@media screen and (max-width: 500px) {
+.heading {
+font-size: 30px;
+}
+.login-button {
+  font-size: 15px;
+  padding: 0 2px 10px 2px;
+  line-height: 35px;
+  width: 70px;
+  height: 40px;
+}
+.logo {
+  height: 40px;
+}
+}
+@media screen and (max-width: 360px) {
+.heading {
+font-size: 25px;
+padding-right: 4px;
+padding-left: 3px;
+}
+.login-button {
+font-size: 12px;
+}
+}

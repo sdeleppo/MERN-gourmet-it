@@ -1,36 +1,11 @@
-    .toolbar {
 
-        display: flex;
-        flex-direction: row;
-        background: rgb(240, 237, 236);
-
-    }
-    
-    .heading {
-        color:#7a2604b6;
-        font-family: 'Playfair Display', serif;
-        font-size: 60px;
-        font-weight: bolder;
-        margin: auto;
-        white-space: nowrap;
-        text-align: center; 
-        flex-grow: 4;
-
-        display: flex;
-        align-items: center;
-        align-content: center;
-        justify-content: center;
-        display: inline-block;
-
-    }
-
-    /* CSS */
+    /* app CSS */
     .button-74 {
       background-color: #fbeee0;
       border: 2px solid #422800;
       border-radius: 30px;
       box-shadow: #422800 4px 4px 0 0;
-      color: #422800;
+      color: #221400;
       cursor: pointer;
       display: inline-block;
       font-weight: 600;
@@ -101,4 +76,9 @@ body{
 }
 .font-family {
   font-family: 'Playfair Display', serif;
+}
+@media screen and (max-width: 600px) {
+.recipes-container {
+  flex-direction: column-reverse;
+}
 }

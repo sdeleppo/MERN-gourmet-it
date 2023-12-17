@@ -1,4 +1,42 @@
+Sample Recipes
+
 Cake
-3 cups flour, 2 eggs, 1 stick of butter, milk, vanilla extract
-Mix dry and wet ingredients separately, slowly combine, then bake at 350 degrees.
+3 cups flour
+2 eggs
+1 stick of butter
+milk
+vanilla extract
+Mix dry and wet ingredients separately, slowly combine, then bake at 350 degrees for 40 minutes.
 dessert, sweet, gluten
+
+Deviled Eggs
+Carton of eggs
+mustard
+mayo
+paprika
+Hard boil as many eggs as desired, scoop out yolk. Combine yolk with mustard, mayo and paprika. Fill egg whites with mixture
+protein 
+
+Fruit Pie
+Fruit of choice
+pie crust
+sugar
+gelatin
+milk
+Create sugar, fruit, gelatin filling. Pour into pie crust. Bake at 350 degrees for 30 minutes.
+dessert,fruit
+
+want
+- bullet point defaults on ingredients---- done!
+- tags separated by commas saved in array----done!
+- mobile responsiveness at different sizes-----done!
+- veg/vegan toggles-----done!
+- way to view entire single recipe when clicked on/readmore, limiting text on recipe card previews
+- login w/ like/delete/update specific functionality
+- search
+- recipe randomized suggestion based on filters
+- make loading gif responsive
+
+maybe
+-pagination
+-comments?
