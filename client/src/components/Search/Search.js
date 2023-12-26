@@ -10,11 +10,12 @@ const Search = () => {
                 marginTop: '60px',
                 width: '65%',
                 textAlign: "center",
-                color: "#7a2604b6",
-                margin: "auto"
+                backgroundColor: "rgb(240, 237, 236)",
+                margin: "auto",
+                boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"
             }} >
                 <div className='search-text'>Find the perfect recipe</div>
-                <Box color="white"
+                <Box
                     bgcolor="rgb(240, 237, 236)" p={1} className="box">
                     <input></input>
                     <button className='search-button'>Search</button>
