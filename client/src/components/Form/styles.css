@@ -21,6 +21,7 @@
     width:40%;
     outline-style: solid;
     outline-color: rgb(255, 234, 225);
+    z-index: 2;
     }
 
     @media screen and (max-width: 800px) {
@@ -149,12 +150,14 @@
         display: inline-block;
     }
 
-    .toggle-text {
-        display: block;
+    .toggles {
+        display: flex;
         margin-bottom: 10px;
         font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
         font-weight: bold;
         color: #422800;
+        align-items: center;
+        justify-content: space-evenly;
     }
     
     

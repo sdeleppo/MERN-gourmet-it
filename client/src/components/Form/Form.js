@@ -154,17 +154,21 @@ const Form = (props) => {
                             Instructions:<br></br>
                             <textarea placeholder="Mix flour, egg, & butter in a bowl..." value={instructions} onChange={e => setInstructions(e.target.value)} />
                         </label>
-                        <div className="toggle-text">
+                        <div className="toggles">
+                            <div style={{alignItems:"center", display:"flex"}}>
                             <Switch
                                 checked={isVegetarian}
                                 onChange={toggleVegetarian}
                                 inputProps={{ 'aria-label': 'controlled' }}
                             /> Vegetarian
+                            </div>
+                            <div style={{alignItems:"center", display:"flex"}}>
                             <Switch
                                 checked={isVegan}
                                 onChange={toggleVegan}
                                 inputProps={{ 'aria-label': 'controlled' }}
                             /> Vegan
+                            </div>
                         </div>
                         <label>
                             Comma Separated Tags:

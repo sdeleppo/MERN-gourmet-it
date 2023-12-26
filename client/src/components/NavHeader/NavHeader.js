@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, AppBar, Toolbar, Menu, MenuItem, Button, Avatar, Grow, Grid } from '@material-ui/core';
+import { AppBar, Toolbar, Menu, MenuItem, Button, Avatar } from '@material-ui/core';
 import { useState } from "react";
 import { Header } from 'semantic-ui-react'
 
@@ -10,6 +10,7 @@ import menuImg from '../../images/menu.png'
 import styles from "./styles.css";
 
 import { HashLink as Link } from 'react-router-hash-link';
+import zIndex from "@material-ui/core/styles/zIndex.js";
 
 const NavHeader = () => {
 
@@ -32,7 +33,7 @@ const NavHeader = () => {
 
 
     return (
-        <AppBar position="sticky">
+        <AppBar position="sticky" style={{zIndex:1}}>
             <Toolbar variant="dense" className={"toolbar"}>
                 <img src={logo} alt="logo" className="logo" />
                 <Button
