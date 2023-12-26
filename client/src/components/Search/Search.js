@@ -17,7 +17,7 @@ const Search = () => {
                 <div className='search-text'>Find the perfect recipe</div>
                 <Box
                     bgcolor="rgb(240, 237, 236)" p={1} className="box">
-                    <input></input>
+                    <input></input><br></br>
                     <button className='search-button'>Search</button>
                 </Box>
             </div >
