@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Menu, MenuItem, Button, Avatar } from '@material-ui/co
 import { useState } from "react";
 import { Header } from 'semantic-ui-react'
 
-import Form from '../Form/Form.js'
+import Form from '../Forms/Form.js'
 
 import logo from '../../images/logo.png'
 import menuImg from '../../images/menu.png'
@@ -11,15 +11,23 @@ import styles from "./styles.css";
 
 import { HashLink as Link } from 'react-router-hash-link';
 import zIndex from "@material-ui/core/styles/zIndex.js";
+import LoginForm from '../Forms/LoginForm.js'
 
 const NavHeader = () => {
 
-    const [seen, setSeen] = useState(false)
+    const [isFormVisible, setFormVisible] = useState(false);
+    const [isLoginFormVisible, setLoginFormVisible] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
 
-    function togglePop() {
-        setSeen(!seen);
+    const toggleForm = () => {
+        setFormVisible(!isFormVisible);
+        setLoginFormVisible(false); // Ensure LoginForm is hidden when Form is shown
         handleClose();
+    };
+
+    const toggleLoginForm = () => {
+        setLoginFormVisible(!isLoginFormVisible);
+        setFormVisible(false); // Ensure Form is hidden when LoginForm is shown
     };
 
 
@@ -52,14 +60,14 @@ const NavHeader = () => {
                     <MenuItem onClick={handleClose}>
                         <Link to="/#recipes">View Recipes</Link>
                     </MenuItem>
-                    <MenuItem onClick={togglePop}>
+                    <MenuItem onClick={toggleForm}>
                         Share your Recipe
                     </MenuItem>
-                    {seen ? <Form toggle={togglePop} /> : null}
                 </Menu>
-                {seen ? <Form toggle={togglePop} /> : null}
                 <Header as='h1' className="heading">Gourmet It</Header>
-                <button className={"login-button"}>Login</button>
+                <button className={"login-button"} onClick={toggleLoginForm}>Login</button>
+                {isFormVisible && <Form toggle={toggleForm} />}
+                {isLoginFormVisible && <LoginForm toggle={toggleLoginForm} />}
             </Toolbar ></AppBar >
     )
 }

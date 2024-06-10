@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import * as api from '../../../api/apiService.js'
-import Form from '../../Form/Form.js'
+import Form from '../../Forms/Form.js'
 
 const Recipe = ({
     recipe

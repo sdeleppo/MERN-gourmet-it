@@ -3,7 +3,7 @@ import { Container, AppBar, Toolbar, Menu, MenuItem, Button, Avatar, Grow, Grid 
 import { useState } from "react";
 import NavHeader from './components/NavHeader/NavHeader.js'
 
-import Form from './components/Form/Form.js'
+import Form from './components/Forms/Form.js'
 import Recipes from './components/Recipes/Recipes.js'
 import logo from './images/logo.png'
 import menuImg from './images/menu.png'

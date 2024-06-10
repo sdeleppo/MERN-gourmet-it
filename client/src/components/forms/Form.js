@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./styles.css";
 import { Toolbar, Grow } from "@material-ui/core";
 import logo from '../../images/logo.png'
@@ -13,47 +13,20 @@ import Switch from "react-switch";
 
 
 const Form = (props) => {
-    // take optional recipe if filled out already. recipe = []
-    // if recipe is set, set default state of variables below to orig recipe for updating
-    //if recipe exists set create button text to "update"
-    const [editingRecipe, setEditingRecipe] = useState(props.editing)
-    const [title, setTitle] = useState(!editingRecipe ? (
-        ''
-    ) : (
-        editingRecipe.title
-    ))
-    const defaultIngredients = !editingRecipe ? (
-        []
-    ) : (
-        editingRecipe.ingredients
-    )
-    const [ingredients, setIngredients] = useState(defaultIngredients)
-    const [instructions, setInstructions] = useState(!editingRecipe ? (
-        ''
-    ) : (
-        editingRecipe.instructions
-    ))
-    const [tags, setTags] = useState(!editingRecipe ? (
-        ''
-    ) : (
-        editingRecipe.tags
-    ))
-    const [selectedFile, setSelectedFile] = useState(!editingRecipe ? (
-        ''
-    ) : (
-        editingRecipe.selectedFile
-    ))
-    const [isVegetarian, setIsVegetarian] = useState(!editingRecipe ? (
-        false
-    ) : (
-        editingRecipe.isVegetarian
-    ))
-    const [isVegan, setIsVegan] = useState(!editingRecipe ? (
-        false
-    ) : (
-        editingRecipe.isVegan
-    ))
-
+    const [recipeData, setRecipeData] = useState({
+            title: '',
+            ingredients: '', 
+            instructions: '', 
+            tags: '', 
+            selectedFile: '', 
+            isVegetarian: false, 
+            isVegan: false
+        });
+    
+        useEffect(() => {
+            if (props.editing) setRecipeData(props.editing);
+          }, [props.editing]);
+          
 
     const [loading, setLoading] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
@@ -64,23 +37,14 @@ const Form = (props) => {
     }
 
     function toggleVegetarian() {
-        setIsVegetarian(!isVegetarian);
+        setRecipeData({...recipeData, isVegetarian: !recipeData.isVegetarian});
     };
 
     function toggleVegan() {
-        setIsVegan(!isVegan);
+        setRecipeData({...recipeData, isVegan: !recipeData.isVegan});
     }
 
-    const handleSaveRecipe = () => {
-        const data = {
-            title,
-            ingredients,
-            instructions,
-            tags,
-            selectedFile,
-            isVegetarian,
-            isVegan
-        };
+    const handleSaveRecipe = (data) => {
         setLoading(true);
         api
             .createRecipe(data)
@@ -96,19 +60,10 @@ const Form = (props) => {
             });
     }
 
-    const handleUpdateRecipe = () => {
-        const data = {
-            title,
-            ingredients,
-            instructions,
-            tags,
-            selectedFile,
-            isVegetarian,
-            isVegan
-        };
+    const handleUpdateRecipe = (data) => {
         setLoading(true);
         api
-            .updateRecipe(editingRecipe._id, data)
+            .updateRecipe(recipeData._id, data)
             .then(() => {
                 setLoading(false);
                 enqueueSnackbar('Recipe Updated.', { variant: 'success' });
@@ -120,7 +75,10 @@ const Form = (props) => {
                 console.log(error);
             });
     }
-
+    const handleIngredientsInput = (e) => {
+        const lines = e.currentTarget.innerText.split('\n');
+        setRecipeData({ ...recipeData, ingredients: lines });
+    };
     return (
         <Grow in>
             <div className="popup">
@@ -134,37 +92,37 @@ const Form = (props) => {
                     <form onSubmit={handleSubmit}>
                         <label>
                             Dish Name:
-                            <input placeholder="Cake" type="text" value={title} onChange={e => setTitle(e.target.value)} />
+                            <input placeholder="Cake" type="text" value={recipeData.title} onChange={e => setRecipeData({...recipeData, title: e.target.value})} />
                         </label>
                         <label>
                             Ingredients:<br></br>
                             <div
                                 className="text-area"
                                 contentEditable='true'
-                                onInput={e => setIngredients(e.currentTarget.innerText.split('\n'))}
+                                onInput={e => handleIngredientsInput}
                             >
-                                {defaultIngredients.length == 0 ? (
-                                    <li> </li>
+                                {recipeData.ingredients.length == 0 ? (
+                                    <ul><li></li></ul>
                                 ) : (
-                                    defaultIngredients.map((el, i) => <li key={i}>{el}</li>)
+                                    recipeData.ingredients.map((el, i) => <li key={i}>{el}</li>)
                                 )}
                             </div>
                         </label>
                         <label>
                             Instructions:<br></br>
-                            <textarea placeholder="Mix flour, egg, & butter in a bowl..." value={instructions} onChange={e => setInstructions(e.target.value)} />
+                            <textarea placeholder="Mix flour, egg, & butter in a bowl..." value={recipeData.instructions} onChange={e => setRecipeData({...recipeData, instructions: e.target.value})} />
                         </label>
                         <div className="toggles">
                             <div style={{alignItems:"center", display:"flex"}}>
                             <Switch
-                                checked={isVegetarian}
+                                checked={recipeData.isVegetarian}
                                 onChange={toggleVegetarian}
                                 inputProps={{ 'aria-label': 'controlled' }}
                             /> Vegetarian
                             </div>
                             <div style={{alignItems:"center", display:"flex"}}>
                             <Switch
-                                checked={isVegan}
+                                checked={recipeData.isVegan}
                                 onChange={toggleVegan}
                                 inputProps={{ 'aria-label': 'controlled' }}
                             /> Vegan
@@ -172,18 +130,18 @@ const Form = (props) => {
                         </div>
                         <label>
                             Comma Separated Tags:
-                            <input placeholder="dairy, gluten, dessert" type="text" value={tags} onChange={e => setTags(e.target.value.split(','))} />
+                            <input placeholder="dairy, gluten, dessert" type="text" value={recipeData.tags} onChange={e => setRecipeData({...recipeData, tags:e.target.value.split(',')})} />
                         </label>
                         <div className="file-input">
                             <label>Upload Photo:</label>
                             <FileBase type="file"
                                 multiple={false}
-                                onDone={({ base64 }) => setSelectedFile(base64)}></FileBase>
+                                onDone={({ base64 }) => setRecipeData({...recipeData, selectedFile: base64})}></FileBase>
                         </div>
-                        {!editingRecipe ? (
-                            <button type="submit" onClick={handleSaveRecipe}>Create</button>
+                        {!props.editing ? (
+                            <button type="submit" onClick={() =>handleSaveRecipe(recipeData)}>Create</button>
                         ) : (
-                            <button type="submit" onClick={handleUpdateRecipe}>Update</button>
+                            <button type="submit" onClick={() => handleUpdateRecipe(recipeData)}>Update</button>
                         )}
                     </form>
                 </div>
