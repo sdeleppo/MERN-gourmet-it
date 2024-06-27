@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import styles from "./styles.css";
-import { Toolbar, Grow } from "@material-ui/core";
+import { Toolbar, Grow, Grid } from "@material-ui/core";
 import logo from '../../images/logo.png'
 import axios from 'axios';
 import * as api from '../../api/apiService.js';
@@ -66,24 +66,47 @@ const LoginForm = ({ toggle }) => {
                 <div className="popup-inner">
                     <Toolbar>
                         <img style={{ marginLeft: -15 }} src={logo} alt="logo" height="60" />
-                        <Header as='h1' className="heading-form">Login</Header>
+                        <Header as='h1' className="heading-form">{ !isSignup ? "Login" : "Sign Up" }</Header>
                         <button type="button" onClick={toggle}>X</button>
                     </Toolbar>
 
                     <form onSubmit={handleSubmit}>
+                        { isSignup && (
+                            <>
+                                <label >
+                                    First Name:
+                                    <input placeholder="Enter your first name" type="text" handleChange={handleChange} />
+                                </label>
+                                <label >
+                                    Last Name:
+                                    <input placeholder="Enter your last name" type="text" handleChange={handleChange} />
+                                </label>
+                            </>
+                        )}
                         <label >
                             Email:
-                            <input placeholder="Enter your email" type="text" value={''} handleChange={handleChange} />
+                            <input placeholder="Enter your email" type="text" handleChange={handleChange} />
                         </label>
                         <label >
                             Password:
-                            <input placeholder="Enter your password" type="text" value={''} handleChange={handleChange} />
+                            <input placeholder="Enter your password" type="text" handleChange={handleChange} />
                         </label>
-                        {!0 ? (
+                        { isSignup &&
+                                <label >
+                                    Confirm Password:
+                                    <input placeholder="Confirm your password" type="text" value={''} handleChange={handleChange} />
+                                </label>
+                        }
+                        {!isSignup ? ( // change functions for posting data
                             <button type="submit" onClick={() => (handleSubmit)}>Login</button>
                         ) : (
-                            <button type="submit" onClick={() => (handleSubmit)}>Signup</button>
+                            <button type="submit" onClick={() => (handleSubmit)}>Sign Up</button>
                         )}
+
+                        <button type="button" className="styled-button" onClick={switchMode}>
+                            { isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign Up" }
+                        </button>
+
                     </form>
                 </div>
             </div >
