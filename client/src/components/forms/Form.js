@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./styles.css";
 import { Toolbar, Grow } from "@material-ui/core";
 import logo from '../../images/logo.png'
@@ -13,23 +13,21 @@ import Switch from "react-switch";
 
 
 const Form = (props) => {
-    const [recipeData, setRecipeData] = useState({
-            title: '',
-            ingredients: '', 
-            instructions: '', 
-            tags: '', 
-            selectedFile: '', 
-            isVegetarian: false, 
-            isVegan: false
-        });
-    
-        useEffect(() => {
-            if (props.editing) setRecipeData(props.editing);
-          }, [props.editing]);
-          
+    const [title, setTitle] = useState(props.editing ? (props.editing.title) :  (''));
+
+    const defaultIngredients = props.editing ? (props.editing.ingredients) :  ([]);
+
+    const [ingredients, setIngredients] = useState(defaultIngredients);
+    const [instructions, setInstructions] = useState(props.editing ? (props.editing.instructions) :  (''));
+    const [tags, setTags] = useState(props.editing ? (props.editing.tags) :  ([]));
+    const [selectedFile, setSelectedFile] = useState(props.editing ? (props.editing.selectedFile) :  (''));
+    const [isVegetarian, setIsVegetarian] = useState(props.editing ? (props.editing.isVegetarian) :  (false));
+    const [isVegan, setIsVegan] = useState(props.editing ? (props.editing.isVegan) :  (false));
+
 
     const [loading, setLoading] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
+    const contentEditableRef = useRef(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -37,14 +35,23 @@ const Form = (props) => {
     }
 
     function toggleVegetarian() {
-        setRecipeData({...recipeData, isVegetarian: !recipeData.isVegetarian});
+        setIsVegetarian(!isVegetarian);
     };
 
     function toggleVegan() {
-        setRecipeData({...recipeData, isVegan: !recipeData.isVegan});
+        setIsVegan(!isVegan);
     }
 
-    const handleSaveRecipe = (data) => {
+    const handleSaveRecipe = () => {
+        const data = {
+            title,
+            ingredients,
+            instructions,
+            tags,
+            selectedFile,
+            isVegetarian,
+            isVegan
+        };
         setLoading(true);
         api
             .createRecipe(data)
@@ -60,10 +67,19 @@ const Form = (props) => {
             });
     }
 
-    const handleUpdateRecipe = (data) => {
+    const handleUpdateRecipe = () => {
+        const data = {
+            title,
+            ingredients,
+            instructions,
+            tags,
+            selectedFile,
+            isVegetarian,
+            isVegan
+        };
         setLoading(true);
         api
-            .updateRecipe(recipeData._id, data)
+            .updateRecipe(props.editing._id, data)
             .then(() => {
                 setLoading(false);
                 enqueueSnackbar('Recipe Updated.', { variant: 'success' });
@@ -75,10 +91,33 @@ const Form = (props) => {
                 console.log(error);
             });
     }
-    const handleIngredientsInput = (e) => {
-        const lines = e.currentTarget.innerText.split('\n');
-        setRecipeData({ ...recipeData, ingredients: lines });
+
+    
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+
+            if (e.key === 'Backspace') {
+                if (range.startOffset === 0 && range.endOffset === 0 && !range.startContainer.previousSibling) {
+                    e.preventDefault();
+                }
+            }
+        };
+
+        const div = contentEditableRef.current;
+        div.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            div.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    const handleInput = (e) => {
+        const lines = e.currentTarget.innerText.split('\n').filter(line => line.trim() !== '');
+        setIngredients(lines);
     };
+
     return (
         <Grow in>
             <div className="popup">
@@ -92,37 +131,38 @@ const Form = (props) => {
                     <form onSubmit={handleSubmit}>
                         <label>
                             Dish Name:
-                            <input placeholder="Cake" type="text" value={recipeData.title} onChange={e => setRecipeData({...recipeData, title: e.target.value})} />
+                            <input placeholder="Cake" type="text" value={title} onChange={e => setTitle(e.target.value)} />
                         </label>
                         <label>
                             Ingredients:<br></br>
                             <div
+                                ref={contentEditableRef}
                                 className="text-area"
                                 contentEditable='true'
-                                onInput={e => handleIngredientsInput}
+                                onInput={handleInput}
                             >
-                                {recipeData.ingredients.length == 0 ? (
-                                    <ul><li></li></ul>
+                                {defaultIngredients.length == 0 ? (
+                                    <li> </li>
                                 ) : (
-                                    recipeData.ingredients.map((el, i) => <li key={i}>{el}</li>)
+                                    defaultIngredients.map((el, i) => <li key={i}>{el}</li>)
                                 )}
                             </div>
                         </label>
                         <label>
                             Instructions:<br></br>
-                            <textarea placeholder="Mix flour, egg, & butter in a bowl..." value={recipeData.instructions} onChange={e => setRecipeData({...recipeData, instructions: e.target.value})} />
+                            <textarea placeholder="Mix flour, egg, & butter in a bowl..." value={instructions} onChange={e => setInstructions(e.target.value)} />
                         </label>
                         <div className="toggles">
                             <div style={{alignItems:"center", display:"flex"}}>
                             <Switch
-                                checked={recipeData.isVegetarian}
+                                checked={isVegetarian}
                                 onChange={toggleVegetarian}
                                 inputProps={{ 'aria-label': 'controlled' }}
                             /> Vegetarian
                             </div>
                             <div style={{alignItems:"center", display:"flex"}}>
                             <Switch
-                                checked={recipeData.isVegan}
+                                checked={isVegan}
                                 onChange={toggleVegan}
                                 inputProps={{ 'aria-label': 'controlled' }}
                             /> Vegan
@@ -130,18 +170,18 @@ const Form = (props) => {
                         </div>
                         <label>
                             Comma Separated Tags:
-                            <input placeholder="dairy, gluten, dessert" type="text" value={recipeData.tags} onChange={e => setRecipeData({...recipeData, tags:e.target.value.split(',')})} />
+                            <input placeholder="dairy, gluten, dessert" type="text" value={tags} onChange={e => setTags(e.target.value.split(','))} />
                         </label>
                         <div className="file-input">
                             <label>Upload Photo:</label>
                             <FileBase type="file"
                                 multiple={false}
-                                onDone={({ base64 }) => setRecipeData({...recipeData, selectedFile: base64})}></FileBase>
+                                onDone={({ base64 }) => setSelectedFile(base64)}></FileBase>
                         </div>
                         {!props.editing ? (
-                            <button type="submit" onClick={() =>handleSaveRecipe(recipeData)}>Create</button>
+                            <button type="submit" onClick={handleSaveRecipe}>Create</button>
                         ) : (
-                            <button type="submit" onClick={() => handleUpdateRecipe(recipeData)}>Update</button>
+                            <button type="submit" onClick={handleUpdateRecipe}>Update</button>
                         )}
                     </form>
                 </div>

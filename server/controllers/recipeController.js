@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 
 export const createRecipe = async (req, res) => {
     const recipeBody = req.body;
-    console.log(recipeBody);
     if (
         !req.body.title ||
         !req.body.ingredients ||
@@ -36,8 +35,6 @@ export const getRecipes = async (req, res) => {
     try {
         const recipes = await Recipe.find()
 
-        console.log(recipes)
-
         res.status(200).json({
             count: recipes.length,
             data: recipes
@@ -51,8 +48,6 @@ export const getRecipe = async (req, res) => {
     try {
         const { id } = req.params;
         const recipe = await Recipe.findById(id)
-
-        console.log(recipe)
 
         res.status(200).json({
             data: recipe
